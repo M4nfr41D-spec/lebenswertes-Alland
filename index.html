@@ -1,200 +1,1255 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Lebenswertes Alland</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <title>Lebenswertes Alland bewahren</title>
+  <meta name="description" content="Initiativantrag gemäß § 16 NÖ Gemeindeordnung 1973 – für eine verantwortungsvolle, nachhaltige Ortsentwicklung in Alland." />
 
-  <link rel="stylesheet" href="assets/css/style.css"/>
-  <script defer src="assets/js/app.js"></script>
+  <style>
+    :root{
+      --ink:#0A2e5C;
+      --ink-2:#163e8A;
+      --bg:#FFFdfe;
+      --bg-soft:rgba(235, 237, 243, 0.067);
+      --line:#e3e3f9;
+      --cta:#FF8a05;
+      --cta-2:#F29b2B;
+      --shadow: 0 8px 20px rgba(13, 32, 60, .10);
+      --radius: 14px;
+      --max: 1100px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--ink);
+      background:var(--bg);
+      line-height:1.65;
+      text-rendering:optimizeLegibility;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit}
+
+    .wrap{max-width:var(--max); margin:0 auto; padding:0 20px;}
+    .section{padding:70px 0;}
+
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter:saturate(140%) blur(5px);
+      -webkit-backdrop-filter:saturate(140%) blur(15px);
+      background: rgba(255,255,255,.78);
+      border-bottom:1px solid rgba(226,230,238,.75);
+    }
+    .topbar-inner{
+      max-width:var(--max); margin:0 auto; padding:10px 20px;
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      position:relative; /* needed for burger dropdown positioning */
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:950;
+      letter-spacing:.2px;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:99px;
+      background:linear-gradient(135deg,var(--ink),var(--ink-2));
+      box-shadow:0 0 0 4px rgba(10,46,92,.10);
+    }
+    .nav{
+      display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+      font-size:.95rem;
+    }
+    .nav a{
+      text-decoration:none; padding:8px 10px; border-radius:10px;
+      color: rgba(10,46,92,.92);
+    }
+    .nav a:hover{background:rgba(10,46,92,.06);}
+    .nav .cta-mini{
+      background: rgba(255,138,0,.12);
+      border:1px solid rgba(255,138,0,.35);
+    }
+
+    /* ===== HOTFIX: Lesbarer Text auf weißem Hintergrund (gegen Theme/Elementor Overrides) ===== */
+    .wrap, .card, .accordion, .acc-btn, .acc-inner, .cta-card, .dialog, .dialog-body, .foot{
+      color: var(--ink) !important;
+    }
+    .muted, .helper, .smallprint, .tag, .acc-sub{
+      color: var(--ink) !important;
+      opacity: 1 !important;
+    }
+
+    /* ===== HOTFIX: Mail-Links immer sichtbar + immer echtes mailto (gegen Click-Interceptor) ===== */
+    a[href^="mailto:"], a[href^="mailto:"]:visited{
+      color: var(--ink) !important;
+      opacity: 1 !important;
+      font-weight: 950;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      text-decoration-thickness: 1px;
+    }
+    a[href^="mailto:"]:hover{ text-decoration-thickness: 2px; }
+
+
+    /* ===== HOTFIX: Mobile/Tablet Burger Menu (Desktop bleibt wie gehabt) ===== */
+    .nav-toggle{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(10,46,92,.12);
+      background:#fff;
+      color: var(--ink);
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav-toggle svg{display:block}
+
+    @media (max-width: 980px){
+      .nav-toggle{ display:inline-flex; }
+
+      /* hide nav by default on small screens */
+      #siteNav{
+        display:none;
+        position:absolute;
+        left:20px; right:20px;
+        top: calc(100% + 10px);
+        flex-direction:column;
+        align-items:flex-start;
+        gap:6px;
+        padding:12px 12px;
+        border-radius:14px;
+        background: rgba(255,255,255,.98);
+        border:1px solid rgba(226,230,238,.95);
+        box-shadow: 0 16px 40px rgba(13,32,60,.14);
+        z-index: 60;
+      }
+      #siteNav a{ width:100%; padding:10px 12px; }
+
+      .topbar.is-open #siteNav{ display:flex; }
+    }
+
+    .hero{
+      position:relative;
+      min-height:78vh;
+      overflow:hidden;
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(22,62,122,.20), transparent 60%),
+                  radial-gradient(1200px 700px at 80% 30%, rgba(255,138,0,.12), transparent 60%);
+    }
+    .hero-bg{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover;
+      transform:scale(1.02);
+      filter:saturate(1.05);
+    }
+    .hero-overlay{
+      position:absolute; inset:0;
+      background: linear-gradient(180deg, rgba(10,46,92,.78) 0%, rgba(10,46,92,.62) 45%, rgba(10,46,92,.78) 70%);
+    }
+    .hero-inner{
+      position:relative; z-index:2;
+      max-width:var(--max); margin:0 auto; padding:95px 20px 70px;
+    }
+    .kicker{
+      display:inline-flex; gap:10px; align-items:center;
+      padding:8px 12px; border-radius:999px;
+      background: rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.18);
+      color:#fff;
+      font-size:.92rem;
+    }
+    .kicker strong{font-weight:950}
+    .hero h1{
+      margin:18px 0 12px;
+      color:#fff;
+      font-size: clamp(2.1rem, 4.3vw, 3.4rem);
+      line-height:1.12;
+      letter-spacing:-.6px;
+    }
+    .hero p{
+      margin:0;
+      color: rgba(255,255,255,.90);
+      max-width:760px;
+      font-size: clamp(1.02rem, 1.6vw, 1.2rem);
+    }
+    .hero-actions{
+      margin-top:28px;
+      display:flex; flex-wrap:wrap; gap:12px; align-items:center;
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:14px 18px;
+      border-radius:12px;
+      border:1px solid transparent;
+      text-decoration:none;
+      font-weight:850;
+      letter-spacing:.2px;
+      cursor:pointer;
+      transition: transform .08s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active{transform: translateY(1px);}
+    .btn-primary{
+      background: linear-gradient(135deg, var(--cta) 0%, var(--cta-2) 100%);
+      color:#fff;
+      box-shadow: 0 0 16px rgba(255,138,0,.32);
+    }
+    .btn-primary:hover{box-shadow: 0 0 34px rgba(255,138,0,.40);}
+    .btn-ghost{
+      background: rgba(225,225,225,.15);
+      border-color: rgba(255,255,255,.22);
+      color:#ffffff;
+    }
+    .btn-ghost:hover{background: rgba(255,255,255,.16);}
+    .btn-navy{
+      background: linear-gradient(135deg, var(--ink) 0%, var(--ink-2) 100%);
+      color:#fff;
+      border-color: transparent;
+    }
+    .btn-navy:hover{box-shadow: 0 14px 34px rgba(10,46,92,.18);}
+    .hero-note{
+      margin-top:18px;
+      color: rgba(255,255,255,.70);
+      font-size:.95rem;
+    }
+
+    /* Cards */
+    .grid{display:grid; gap:16px;}
+    .grid-3{grid-template-columns: repeat(3, minmax(0,1fr));}
+    @media (max-width: 920px){ .grid-3{grid-template-columns:1fr;} }
+
+    .card{
+      background: var(--bg);
+      border:1px solid rgba(226,230,238,.9);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:18px;
+    }
+    .card h3{margin:0 0 6px; font-size:1.05rem;}
+    .muted{color: rgba(10,46,92,.75);}
+
+    /* Pills */
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:8px 12px;
+      border-radius:999px;
+      background: linear-gradient(135deg, var(--ink) 0%, var(--ink-2) 100%);
+      border:1px solid rgba(10,46,92,.10);
+      font-weight:900;
+      font-size:.95rem;
+      color:#fff;
+      box-shadow: 0 10px 22px rgba(10,46,92,.12);
+    }
+
+    /* Accordion */
+    .accordion{
+      border:1px solid rgba(226,230,238,.9);
+      border-radius: var(--radius);
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      background: var(--bg);
+    }
+    .acc-item + .acc-item{border-top:1px solid rgba(226,230,238,.85);}
+    .acc-btn{
+      width:100%;
+      text-align:left;
+      background:transparent;
+      border:0;
+      padding:16px 16px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
+      color:var(--ink);
+      font-weight:950;
+      font-size:1.05rem;
+      -webkit-tap-highlight-color: blue;
+    }
+    .acc-left{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+    .acc-bullet{
+      width:42px; height:42px;
+      border-radius:12px;
+      display:grid; place-items:center;
+      color:#fff;
+      background: linear-gradient(135deg, var(--ink) 0%, var(--ink-2) 100%);
+      border:1px solid rgba(10,46,92,.10);
+      box-shadow: 0 12px 24px rgba(10,46,92,.16);
+      flex: 0 0 auto;
+    }
+    .acc-title-wrap{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width:0;
+    }
+    .acc-title{
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .acc-sub{
+      font-size:.9rem;
+      font-weight:800;
+      color: rgba(18,46,92,.65);
+    }
+    .chev{
+      flex:0 0 auto;
+      width:38px; height:38px;
+      border-radius:12px;
+      display:grid; place-items:center;
+      background: rgba(10,46,92,.06);
+      border:1px solid rgba(22,35,92,.10);
+      transition: transform .18s ease;
+      color: rgba(10,46,92,.80);
+    }
+    .acc-item[data-open="true"] .chev{transform: rotate(180deg);}
+    .acc-panel{
+      height:0;
+      overflow:hidden;
+      transition: height .22s ease;
+    }
+    .acc-inner{
+      padding:0 16px 18px;
+      color: rgba(10,46,92,.90);
+    }
+    .acc-inner p{margin:10px 0}
+    .acc-inner ul{margin:10px 0 10px 20px}
+    .acc-inner li{margin:6px 0}
+    .acc-inner li::marker{color: rgba(10,46,92,.80);}
+
+    /* Highlight */
+    .legal-block{
+      background: linear-gradient(135deg, var(--ink) 0%, var(--ink-2) 100%);
+      border: 1px solid rgba(255,255,255,.14);
+      color: #fff;
+      border-radius:12px;
+      padding:14px 14px;
+      margin-top:12px;
+      box-shadow: 0 16px 34px rgba(10,46,92,.18);
+    }
+    .legal-block strong{color:#fff;} /* keep readable */
+
+    /* Compare */
+    .compare{
+      margin-top:28px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+    @media (max-width: 920px){ .compare{grid-template-columns:1fr;} }
+    figure{margin:0}
+    .shot{
+      border-radius: var(--radius);
+      overflow:hidden;
+      border:1px solid rgba(226,230,238,.9);
+      box-shadow: var(--shadow);
+      background:#fff;
+    }
+    .shot img{display:block; width:100%; height:320px; object-fit:cover;}
+    @media (max-width: 920px){ .shot img{height:260px;} }
+    .shot figcaption{
+      padding:12px 14px;
+      font-weight:950;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .tag{
+      font-size:.86rem;
+      font-weight:950;
+      color: rgba(10,46,92,.66);
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(10,46,92,.06);
+      border:1px solid rgba(10,46,92,.10);
+    }
+
+    /* CTA */
+    .cta-wrap{
+      background: linear-gradient(180deg, var(--bg-soft) 10%, #fff 100%);
+      border-top:1px solid rgba(226,230,238,.75);
+      border-bottom:1px solid rgba(226,230,238,.75);
+    }
+    .cta-grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:16px;
+      align-items:start;
+    }
+    @media (max-width: 980px){ .cta-grid{grid-template-columns:1fr;} }
+    .cta-card{
+      border-radius: var(--radius);
+      border:1px solid rgba(226,230,238,.9);
+      box-shadow: var(--shadow);
+      background:#fff;
+      padding:18px;
+    }
+    .cta-card h3{margin:0 0 6px}
+    .form{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px;}
+    @media (max-width: 680px){ .form{grid-template-columns:1fr;} }
+    label{font-weight:950; font-size:.93rem;}
+    input, textarea{
+      width:100%;
+      padding:14px 12px;
+      border-radius:12px;
+      border:1px solid rgba(170,170,255,.10);
+      background:#ddda;
+      color:var(--ink);
+      font-size:1rem;
+      outline:none;
+    }
+    input:focus, textarea:focus{
+      border-color: rgba(255,138,0,.65);
+      box-shadow: 0 0 0 4px rgba(255,138,0,.18);
+    }
+    .span-2{grid-column:1 / -1;}
+    .checkrow{
+      display:flex; gap:10px; align-items:flex-start;
+      margin-top:10px; font-size:.92rem; color: rgba(10,46,92,.80);
+    }
+    .checkrow input{width:18px; height:18px; margin-top:2px;}
+    .helper{font-size:.92rem; color: rgba(10,46,92,.75);}
+    .cta-actions{display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:14px;}
+
+    .btn-soft{
+      background: rgba(0,0,23,.2);
+      border:1px solid rgba(10,46,92,.14);
+      color: var(--ink);
+    }
+    .btn-soft:hover{background: rgba(10,46,92,.4);}
+
+    /* Modal / Overlay */
+    .modal{
+      position:fixed; inset:0; z-index:1000;
+      display:none;
+
+      /* allow scroll events on mobile */
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .modal[aria-hidden="false"]{display:block;}
+    .backdrop{
+      position:absolute; inset:0;
+      background: rgba(10,46,92,.88);
+    }
+
+    .dialog{
+      position:relative;
+      max-width: 980px;
+      margin: 6vh auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 20px 70px rgba(0,0,0,.25);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.08);
+
+      display:flex;
+      flex-direction:column;
+      max-height: 92vh;
+    }
+    @media (max-width: 1020px){
+      .dialog{
+        margin: 0;
+        border-radius: 0;
+        height: 100%;
+        max-height: 100vh;
+      }
+    }
+    .dialog-head{
+      padding:18px 18px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      background: linear-gradient(135deg, rgba(10,46,92,.06) 0%, rgba(255,138,0,.06) 100%);
+      border-bottom:1px solid rgba(226,230,238,.85);
+      flex: 0 0 auto;
+    }
+    .dialog-title{
+      display:flex; align-items:center; gap:10px; font-weight:950;
+    }
+    .xbtn{
+      width:44px; height:44px; border-radius:14px;
+      border:1px solid rgba(10,46,92,.12);
+      background:#fff;
+      cursor:pointer;
+      display:grid; place-items:center;
+      font-size:18px; font-weight:950;
+    }
+    .dialog-body{
+      padding:18px 18px 22px;
+      flex: 1 1 auto;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      touch-action: pan-y;
+    }
+    .about{
+      display:grid;
+      grid-template-columns: 260px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+    @media (max-width: 860px){ .about{grid-template-columns:1fr;} }
+    .avatar{
+      border-radius: 16px;
+      overflow:hidden;
+      border:1px solid rgba(226,230,238,.9);
+      box-shadow: var(--shadow);
+      background:#fff;
+    }
+    .avatar img{width:100%; height:260px; object-fit:cover; display:block;}
+
+    /* ===== HOTFIX: Tablet-Ansicht – Avatar nicht abschneiden ===== */
+    @media (min-width: 601px) and (max-width: 980px){
+      #aboutModal .avatar img{
+        height: 320px;
+        object-fit: contain;
+        background:#fff;
+      }
+    }
+
+    .about p{margin:10px 0}
+    .about .lead{font-size:1.04rem; font-weight:950}
+    .kpi{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:10px;
+    }
+    @media (max-width: 560px){ .kpi{grid-template-columns:1fr;} }
+    .kpi .card{box-shadow:none; padding:14px;}
+    .smallprint{
+      font-size:.9rem;
+      color: rgba(10,46,92,.70);
+      margin-top:12px;
+    }
+
+    /* Footer */
+    .foot{padding:36px 0; color: rgba(10,46,92,.70);}
+    .foot .links{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin-top:8px;}
+    .foot a{text-decoration:none; padding:6px 10px; border-radius:10px;}
+    .foot a:hover{background: rgba(10,46,92,.06);}
+
+    /* ===== HOTFIX: KEIN heller Text auf weißem Hintergrund ===== */
+    .muted,
+    .helper,
+    .smallprint,
+    .tag,
+    .acc-sub,
+    .foot,
+    .foot .muted,
+    .foot .smallprint{
+      color: var(--ink) !important;
+      opacity: 1 !important;
+    }
+
+    /* keep these white on dark */
+    .legal-block,
+    .legal-block * ,
+    .pill,
+    .pill *,
+    .acc-bullet,
+    .acc-bullet *{
+      color:#fff !important;
+      opacity: 1 !important;
+    }
+
+    /* ===== HOTFIX: mailto-links überall sichtbar + sicher ===== */
+    a[href^="mailto:"]{
+      color: var(--ink) !important;
+      opacity: 1 !important;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      font-weight: 950;
+    }
+    a[href^="mailto:"]:hover{ text-decoration-thickness:2px; }
+  </style>
 </head>
 
 <body>
-  <div id="top"></div>
 
-  <header class="topbar">
+  <div class="topbar">
     <div class="topbar-inner">
-      <a class="brand" href="#top" aria-label="Lebenswertes Alland">
-        <span class="brand-badge" aria-hidden="true"></span>
-        <span>Lebenswertes Alland</span>
-      </a>
+      <div class="brand"><span class="dot"></span>Lebenswertes Alland</div>
 
-      <nav class="nav-desktop" aria-label="Hauptmenü">
-        <a href="#top">Start</a>
-        <a href="#unterstuetzen">Unterstützen</a>
-        <a href="#page2" data-open-overlay="page2">Warum mir Alland wichtig ist</a>
-      </nav>
-
-      <button class="burger" type="button" id="burgerBtn"
-              aria-label="Menü öffnen"
-              aria-controls="mobilePanel"
+      <!-- Burger (nur Mobile/Tablet sichtbar) -->
+      <button class="nav-toggle" type="button"
+              aria-label="Menü"
+              aria-controls="siteNav"
               aria-expanded="false">
-        <span class="burger-lines" aria-hidden="true">
-          <span></span><span></span><span></span>
-        </span>
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M4 6h16"></path>
+          <path d="M4 12h16"></path>
+          <path d="M4 18h16"></path>
+        </svg>
       </button>
-    </div>
 
-    <div class="mobile-panel" id="mobilePanel" role="navigation" aria-label="Mobiles Menü">
-      <a href="#top">Start</a>
-      <a href="#unterstuetzen">Unterstützen</a>
-      <a href="#page2" data-open-overlay="page2">Warum mir Alland wichtig ist</a>
-    </div>
-  </header>
-
-  <header class="hero">
-    <div class="container">
-      <h1>Lebenswertes Alland bewahren</h1>
-      <p>Ortsentwicklung mit Maß und Verantwortung</p>
-      <a href="#page2" class="header-button" data-open-overlay="page2">Warum mir Alland wichtig ist</a>
-    </div>
-  </header>
-
-  <section class="accordion-section">
-    <div class="container">
-      <h2>Worum geht es?</h2>
-
-      <div class="accordion-item open">
-        <button class="accordion-header" type="button">Warum ein neuer Bebauungsplan notwendig ist</button>
-        <div class="accordion-content">
-          <p>
-            In Alland sind zahlreiche Wohnbauprojekte geplant bzw. bereits genehmigt.
-            Dadurch ist in den kommenden Jahren mit einem deutlichen Bevölkerungszuwachs zu rechnen.
-            Viele Bürgerinnen und Bürger sehen die bestehende Infrastruktur bereits heute an ihrer Belastungsgrenze.
-          </p>
-          <p>
-            Ziel dieser Initiative ist es, eine verantwortungsvolle, nachhaltige und infrastrukturgerechte
-            Ortsentwicklung sicherzustellen.
-          </p>
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <button class="accordion-header" type="button">Schutz der Lebensqualität und des Ortsbildes</button>
-        <div class="accordion-content">
-          <p>
-            Ein ungeplantes oder zu rasches Wachstum gefährdet die Lebensqualität sowie den ländlichen Charakter
-            unserer Gemeinde. Alland soll sich weiterentwickeln – jedoch mit Maß und Ziel,
-            im Einklang mit Natur, Infrastruktur und gewachsener Ortsstruktur.
-          </p>
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <button class="accordion-header" type="button">Was der neue Bebauungsplan konkret vorsehen soll</button>
-        <div class="accordion-content">
-          <ul>
-            <li>Vermeidung großflächiger Wohnsiedlungen</li>
-            <li>Größere Mindestbauplatzgrößen</li>
-            <li>Niedrige Bebauungsdichte</li>
-            <li>Begrenzung der Wohneinheiten pro Bauplatz</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="accordion-item">
-        <button class="accordion-header" type="button">Ziel der Bürgerinitiative</button>
-        <div class="accordion-content">
-          <p>
-            Ziel ist es, Alland als lebenswerte Gemeinde im Wienerwald zu erhalten und zukünftige bauliche
-            Entwicklungen mit Augenmaß zu gestalten – im Einklang mit Umwelt, Verkehr,
-            Infrastruktur und Lebensqualität.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="cta-section" id="unterstuetzen">
-    <div class="container">
-      <h2>Initiativantrag unterstützen</h2>
-      <p class="cta-intro">
-        Ihre Unterstützung hilft, eine verantwortungsvolle und lebenswerte Entwicklung Allands sicherzustellen.
-      </p>
-
-      <div class="cta-grid">
-        <div class="cta-box">
-          <h3>Persönliche Unterstützung durch Kontaktaufnahme</h3>
-          <p>
-            Gerne nehmen wir persönlich Kontakt mit Ihnen auf, um einen Termin für die Unterschrift zu vereinbaren.
-          </p>
-          <form>
-            <input type="text" placeholder="Vorname" required>
-            <input type="text" placeholder="Familienname" required>
-            <input type="tel" placeholder="Telefonnummer" required>
-            <input type="email" placeholder="E-Mail-Adresse">
-
-            <label class="consent">
-              <input type="checkbox" required>
-              <span>
-                Ich stimme der Kontaktaufnahme zum Zweck der persönlichen Unterschriftsleistung zu.
-                Die Daten werden ausschließlich für diesen Zweck verwendet und nach Abschluss der Initiative gelöscht.
-              </span>
-            </label>
-
-            <button type="submit" class="cta-button">
-              Kontaktaufnahme anfordern
-            </button>
-          </form>
-        </div>
-
-        <div class="cta-box">
-          <h3>Unterstützungsformular herunterladen</h3>
-          <p>
-            Alternativ können Sie den Initiativantrag selbst unterstützen, indem Sie das Formular herunterladen,
-            ausdrucken, unterschreiben und persönlich abgeben oder übermitteln.
-          </p>
-          <a href="assets/pdf/unterstuetzungsformular.pdf" class="cta-button secondary">
-            Unterstützungsformular herunterladen (PDF)
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="container">
-      <p>© Bürgerinitiative Lebenswertes Alland</p>
-    </div>
-  </footer>
-
-  <!-- ===== OVERLAY: Seite 2 (alles in einer Datei) ===== -->
-  <div class="overlay" id="page2Overlay" aria-hidden="true">
-    <div class="overlay-backdrop" data-close-overlay="page2" aria-hidden="true"></div>
-
-    <div class="overlay-panel" role="dialog" aria-modal="true" aria-label="Warum mir Alland wichtig ist" tabindex="-1">
-      <div class="overlay-closebar">
-        <button class="overlay-close" type="button" data-close-overlay="page2">Schließen ✕</button>
-      </div>
-
-      <header class="sub-hero" id="page2">
-        <h1>Warum mir Alland wichtig ist</h1>
-      </header>
-
-      <section class="content">
-        <h2>Persönliche Verbundenheit mit Alland</h2>
-
-        <p>Mein Name ist Michel Matzinger und ich lebe seit jeher in unserer Marktgemeinde Alland, die für mich Heimat und Lebensmittelpunkt ist.</p>
-
-        <p>Die Zukunft unserer Gemeinde liegt mir sehr am Herzen. Besonders wichtig ist mir eine nachhaltige Ortsentwicklung, die Infrastruktur, Verkehr und die Lebensqualität aller Bewohnerinnen und Bewohner berücksichtigt.</p>
-
-        <p>Mit diesem Initiativantrag möchte ich gemeinsam mit Ihnen dafür eintreten, dass sich Alland auch in Zukunft verantwortungsvoll, mit Maß und Ziel weiterentwickelt.</p>
-
-        <p>Bei Fragen oder Anliegen können Sie mich jederzeit gerne kontaktieren:<br>m.matzinger@gmx.at</p>
-
-        <div class="profile">
-          <img src="assets/images/persoenliches-foto.svg" alt="Persönliches Foto">
-          <p>
-            <strong>Michel Matzinger</strong><br>
-            Zustellungsbevollmächtigter gemäß § 16 NÖ Gemeindeordnung 1973
-          </p>
-        </div>
-      </section>
-
-      <footer class="overlay-footer">
-        <a href="#top" data-close-overlay="page2">Zurück zur Startseite</a>
-      </footer>
+      <!-- FIX: nur EIN nav + korrektes id -->
+      <nav class="nav" id="siteNav" aria-label="Navigation">
+        <a href="#anliegen">Anliegen</a>
+        <a href="#vergleich">Bilder</a>
+        <a href="#unterstuetzen" class="cta-mini">Unterstützen</a>
+        <a href="#" onclick="openModal('aboutModal'); return false;">Über uns</a>
+      </nav>
     </div>
   </div>
+
+  <header class="hero">
+    <img class="hero-bg"
+         src="assets/images/alland-hero.jpg"
+         alt="Alland im Wienerwald"
+         loading="eager"
+         decoding="async" referrerpolicy="no-referrer">
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <div class="kicker"><strong>Initiativantrag</strong> gemäß § 16 NÖ Gemeindeordnung 1973</div>
+      <h1>Lebenswertes Alland bewahren.</h1>
+      <p>
+        Wir setzen uns für eine Ortsentwicklung ein, die zu Alland passt: verantwortungsvoll, nachhaltig
+        und im Einklang mit Infrastruktur, Umwelt, Verkehr und Lebensqualität.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#unterstuetzen">Jetzt unterstützen</a>
+        <a class="btn btn-ghost" href="#" onclick="openModal('aboutModal'); return false;">Warum mir Alland wichtig ist</a>
+        <a class="btn btn-ghost" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">Formular als PDF</a>
+      </div>
+
+      <div class="hero-note">
+        Zwei Wege: PDF herunterladen & unterschreiben – oder Kontakt hinterlassen, wir melden uns persönlich.
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="section" id="anliegen">
+      <div class="wrap">
+        <div class="grid grid-3">
+          <div class="card">
+            <div class="pill">Worum geht’s?</div>
+            <p>_________________</p>
+            <h3>Entwicklung mit Augenmaß</h3>
+            <div class="muted">
+              Alland soll sich weiterentwickeln – jedoch mit Maß und Ziel. Der Antrag fordert die Einleitung
+              eines neuen Bebauungsplans, der verantwortungsvoll, nachhaltig und infrastrukturgerecht ist.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="pill">Warum jetzt?</div>
+            <p>__________________</p>
+            <h3>Infrastruktur entlasten</h3>
+            <div class="muted">
+              Geplante und genehmigte Vorhaben erhöhen den Druck auf Bildung, Verkehr, medizinische Versorgung
+              und auf die Umwelt (Bodenversiegelung/Hochwasserrisiko).
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="pill">Was ist das Ziel?</div>
+            <p>___________________</p>
+            <h3>Lebensqualität sichern</h3>
+            <div class="muted">
+              Eine klare, langfristige Planung: Wohnbau mit Verantwortung – abgestimmt auf Gemeindecharakter,
+              Infrastruktur und Lebensqualität.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <h2>die Details im Überblick</h2>
+
+        <div class="accordion" role="region" aria-label="Inhalte">
+          <!-- 1 -->
+          <div class="acc-item" data-open="true">
+            <button class="acc-btn" type="button" aria-expanded="true">
+              <span class="acc-left">
+                <span class="acc-bullet"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></span>
+                <span class="acc-title-wrap">
+                  <span class="acc-title">Unser erklärtes Ziel</span>
+                  <span class="acc-sub">Kurz erklärt</span>
+                </span>
+              </span>
+              <span class="chev"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+            </button>
+            <div class="acc-panel">
+              <div class="acc-inner">
+                <p>
+                  In Alland sind zahlreiche Wohnbauprojekte geplant bzw. bereits genehmigt. Dadurch ist in den kommenden Jahren
+                  mit einem deutlichen Bevölkerungszuwachs zu rechnen. Viele Bürgerinnen und Bürger sehen die bestehende Infrastruktur
+                  bereits jetzt stark belastet.
+                </p>
+                <div class="legal-block">
+                  <strong>Ziel:</strong> Ein neuer Bebauungsplan, der eine verantwortungsvolle, nachhaltige und infrastrukturgerechte
+                  Ortsentwicklung sicherstellt.
+                </div>
+                <p style="margin-top:12px;">
+                  Die vollständige Fassung des Initiativantrags findest du im nächsten Punkt („Vollständiger Wortlaut“).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2 -->
+          <div class="acc-item" data-open="false">
+            <button class="acc-btn" type="button" aria-expanded="false">
+              <span class="acc-left">
+                <span class="acc-bullet"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h8"/></svg></span>
+                <span class="acc-title-wrap">
+                  <span class="acc-title">Initiativantrag – vollständiger Wortlaut</span>
+                  <span class="acc-sub">Gesetzliche Grundlage & Inhalt</span>
+                </span>
+              </span>
+              <span class="chev"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+            </button>
+            <div class="acc-panel">
+              <div class="acc-inner">
+                <p><strong>Initiativantrag gemäß § 16 NÖ Gemeindeordnung 1973<br>
+                zur Änderung des Bebauungsplans der Marktgemeinde Alland</strong></p>
+
+                <p><strong>An den Gemeinderat der Marktgemeinde Alland</strong><br>
+                z.Hd. aller Gemeinderätinnen und Gemeinderäte</p>
+
+                <p>
+                  Wir, die unterzeichnenden Einwohnerinnen und Einwohner der Marktgemeinde Alland,
+                  stellen gemäß § 16 der NÖ Gemeindeordnung 1973 folgenden
+                  <strong>Initiativantrag</strong>
+                </p>
+
+                <p><strong>Antrag</strong><br>
+                  Der Gemeinderat der Marktgemeinde Alland möge beschließen,
+                  die Ausarbeitung und Beschlussfassung eines neuen Bebauungsplans einzuleiten,
+                  der eine verantwortungsvolle, nachhaltige und infrastrukturgerechte Ortsentwicklung sicherstellt.
+                </p>
+
+                <p><strong>Begründung</strong><br>
+                  Die Marktgemeinde Alland zählt derzeit rund 2.700 Einwohnerinnen und Einwohner.
+                  Durch den Bau von über 70 Wohnungen sowie durch zahlreiche weitere bereits genehmigte Bauvorhaben
+                  ist in den kommenden Jahren mit einem deutlichen Bevölkerungszuwachs zu rechnen.
+                </p>
+
+                <p>Nach Ansicht vieler Bürgerinnen und Bürger ist die bestehende Infrastruktur bereits jetzt stark belastet:</p>
+                <ul>
+                  <li>Bildungs- und Betreuungseinrichtungen stehen vor großen Herausforderungen.</li>
+                  <li>Die zunehmende Bodenversiegelung verschärft die Hochwasser- und Überflutungsgefahr.</li>
+                  <li>Die hausärztliche Versorgung ist stark ausgelastet.</li>
+                  <li>Die Verkehrssituation im Ortsgebiet verschärft sich zunehmend.</li>
+                </ul>
+
+                <p>
+                  Ein weiteres ungeplantes oder zu rasches Wachstum gefährdet die Lebensqualität
+                  sowie den ländlichen Charakter unserer Gemeinde.
+                </p>
+
+                <p><strong>Ziel des Antrags</strong><br>
+                  Der neue Bebauungsplan soll insbesondere:
+                </p>
+                <ul>
+                  <li>großflächige Wohnsiedlungen vermeiden,</li>
+                  <li>die Mindestmaße pro Bauplatz erhöhen,</li>
+                  <li>eine niedrige Bebauungsdichte sicherstellen und</li>
+                  <li>die Anzahl der Wohneinheiten pro Bauplatz begrenzen.</li>
+                </ul>
+
+                <p>
+                  Ziel ist es, die Marktgemeinde Alland als lebenswerte Gemeinde im Wienerwald zu erhalten
+                  und zukünftige bauliche Entwicklungen mit Augenmaß, im Einklang mit Infrastruktur,
+                  Verkehr, Umwelt und Lebensqualität, zu gestalten.
+                </p>
+
+                <p><strong>Alland soll sich weiterentwickeln – jedoch mit Maß und Ziel.</strong></p>
+
+                <p><strong>Zustellungsbevollmächtigter gemäß § 16 NÖ Gemeindeordnung 1973</strong><br>
+                  Name: Michel Matzinger<br>
+                  Adresse: Groisbacherstraße 283, 2534 Alland<br>
+                  E-Mail: <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a><br>
+                  Diese Person ist zur Entgegennahme sämtlicher Mitteilungen der Marktgemeinde Alland in dieser Angelegenheit berechtigt.
+                </p>
+
+                <p><strong>Vertreter des Zustellungsbevollmächtigten</strong><br>
+                  Name: Klaus Matzinger<br>
+                  Adresse: Groisbacherstraße 283, 2534 Alland
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3 -->
+          <div class="acc-item" data-open="false">
+            <button class="acc-btn" type="button" aria-expanded="false">
+              <span class="acc-left">
+                <span class="acc-bullet"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></span>
+                <span class="acc-title-wrap">
+                  <span class="acc-title">Unterstützungserklärung</span>
+                  <span class="acc-sub">Kurztext (für Postwurf)</span>
+                </span>
+              </span>
+              <span class="chev"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+            </button>
+            <div class="acc-panel">
+              <div class="acc-inner">
+                <p><strong>Initiativantrag zur Änderung des Bebauungsplans – Marktgemeinde Alland</strong></p>
+                <p>
+                  In Alland sind zahlreiche Wohnbauprojekte geplant bzw. bereits genehmigt. Dadurch ist in den kommenden Jahren
+                  mit einem deutlichen Bevölkerungszuwachs zu rechnen. Viele Bürgerinnen und Bürger sehen die bestehende Infrastruktur
+                  bereits jetzt an ihrer Belastungsgrenze.
+                </p>
+                <p>
+                  Ein ungeplantes oder zu rasches Wachstum gefährdet die Lebensqualität sowie den ländlichen Charakter unserer Gemeinde.
+                </p>
+                <p>
+                  Der Gemeinderat der Marktgemeinde Alland soll daher beschließen, die Ausarbeitung und Beschlussfassung eines neuen
+                  Bebauungsplans einzuleiten, der eine verantwortungsvolle, nachhaltige und infrastrukturgerechte Ortsentwicklung sicherstellt.
+                </p>
+                <p><strong>Der neue Bebauungsplan soll insbesondere:</strong></p>
+                <ul>
+                  <li>großflächige Wohnsiedlungen vermeiden,</li>
+                  <li>größere Mindestbauplatzgrößen vorsehen,</li>
+                  <li>eine niedrige Bebauungsdichte sicherstellen und</li>
+                  <li>die Anzahl der Wohneinheiten pro Bauplatz begrenzen.</li>
+                </ul>
+                <p>
+                  Ziel ist eine Weiterentwicklung Allands mit Maß und Ziel, im Einklang mit Infrastruktur, Umwelt, Verkehr und Lebensqualität.
+                </p>
+                <p class="helper">
+                  Mehr Informationen:
+                  <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+                  – Initiator und Ihr Ansprechpartner für Rückfragen
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4 -->
+          <div class="acc-item" data-open="false">
+            <button class="acc-btn" type="button" aria-expanded="false">
+              <span class="acc-left">
+                <span class="acc-bullet"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+                <span class="acc-title-wrap">
+                  <span class="acc-title">Datenschutz</span>
+                  <span class="acc-sub">kurz & klar</span>
+                </span>
+              </span>
+              <span class="chev"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+            </button>
+            <div class="acc-panel">
+              <div class="acc-inner">
+                <p>
+                  Wenn du deine Kontaktdaten hinterlässt (Option 1), verwenden wir diese ausschließlich für die persönliche Kontaktaufnahme
+                  zur Terminvereinbarung für die Unterschrift. Eine Weitergabe an Dritte erfolgt nicht.
+                </p>
+                <p>
+                  Die Daten werden nach Abschluss der Initiative gelöscht.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="compare section" id="vergleich" style="padding:0; max-width:var(--max);">
+          <figure class="shot">
+            <img src="assets/images/alland-hero.jpg" alt="Lebenswertes Alland" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <figcaption>Unser lebenswertes Alland <span class="tag">Ortsbild</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="assets/images/baustelle.jpg" alt="Aktuelle Bebauung" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+            <figcaption>Aktuelle Bebauung <span class="tag">Baustelle</span></figcaption>
+          </figure>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section cta-wrap" id="unterstuetzen">
+      <div class="wrap">
+        <h2>Jetzt Initiativantrag unterstützen</h2>
+
+        <div class="cta-grid">
+          <div class="cta-card">
+            <h3><strong>Möglichkeit 1</strong> :</h3>
+            <h5>Kontakt hinterlassen - siehe Kontaktformular (wir melden uns persönlich)</h5>
+            <div class="muted">
+              Du möchtest unterstützen, aber nicht selbst drucken? Hinterlasse kurz deine Kontaktdaten.
+              Wir melden uns telefonisch und vereinbaren einen Termin – das Formular bringen wir mit.
+            </div>
+
+            <form id="contactForm" onsubmit="return false;">
+              <div class="form">
+                <div>
+                  <label for="vorname">Vorname</label>
+                  <input id="vorname" name="vorname" autocomplete="given-name" required>
+                </div>
+                <div>
+                  <label for="nachname">Familienname</label>
+                  <input id="nachname" name="nachname" autocomplete="family-name" required>
+                </div>
+                <div>
+                  <label for="telefon">Telefonnummer</label>
+                  <input id="telefon" name="telefon" autocomplete="tel" required>
+                </div>
+                <div>
+                  <label for="email">E-Mail (optional)</label>
+                  <input id="email" name="email" autocomplete="email">
+                </div>
+                <div class="span-2">
+                  <label for="notiz">Notiz (optional)</label>
+                  <textarea id="notiz" name="notiz" rows="3" placeholder="z.B. bevorzugte Zeit für Rückruf"></textarea>
+                </div>
+              </div>
+
+              <div class="checkrow">
+                <input id="consent" type="checkbox" required>
+                <label for="consent" style="font-weight:750">
+                  Ich stimme der Kontaktaufnahme ausschließlich zum Zweck der persönlichen Unterschriftsleistung zu.
+                  Die Daten werden nicht weitergegeben und nach Abschluss der Initiative gelöscht.
+                </label>
+              </div>
+
+              <div class="cta-actions">
+                <button class="btn btn-primary" type="button" id="sendContactBtn">Kontaktanfrage senden</button>
+                <a class="btn btn-navy" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">PDF herunterladen</a>
+                <button class="btn btn-soft" type="button" id="copyEmailBtn">E-Mail kopieren</button>
+              </div>
+
+              <div class="helper" style="margin-top:10px">
+                Hinweis: Die Kontaktanfrage öffnet deine Mail-App.<br>
+                Falls das nicht klappt: „E-Mail kopieren“ und manuell senden an
+                <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>.
+              </div>
+            </form>
+          </div>
+
+          <div class="cta-card">
+            <h3>Möglichkeit 2 :</h3>
+            <h5>Formular herunterladen & selbst unterschreiben</h5>
+            <div class="muted">
+              Lade das Unterstützungsformular herunter, drucke es aus, unterschreibe es und gib es persönlich ab
+              oder übermittle es wie im Formular beschrieben.
+            </div>
+
+            <div class="cta-actions">
+              <a class="btn btn-navy" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">Unterstützungsformular (PDF)</a>
+              <a class="btn btn-soft" href="#" onclick="openModal('aboutModal'); return false;">Alland & ich – Infos zum Initiator</a>
+            </div>
+
+            <div class="legal-block" style="margin-top:14px">
+              <strong>Quick-Guide:</strong>
+              <ol style="margin:10px 0 0 18px; padding:0">
+                <li>PDF öffnen & herunterladen</li>
+                <li>Ausdrucken</li>
+                <li>Unterschreiben</li>
+                <li>Abgeben/Übermitteln (siehe Formular)</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap foot">
+        <div style="text-align:center; font-weight:950">Bürgerinitiative – Lebenswertes Alland</div>
+        <div class="links">
+          <a href="#anliegen">Anliegen</a>
+          <a href="#vergleich">Bilder</a>
+          <a href="#unterstuetzen">Unterstützen</a>
+          <a href="#" onclick="openModal('aboutModal'); return false;">Über uns</a>
+        </div>
+        <div style="text-align:center; margin-top:14px">
+          <span class="muted">Kontakt (Zustellungsbevollmächtigter):</span>
+          Michel Matzinger · Groisbacherstraße 283 · 2534 Alland ·
+          <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+        </div>
+        <div class="smallprint" style="text-align:center">
+          Dieses Informationsangebot dient der Bürgerinitiative und der Organisation der persönlichen Unterschriftsleistung.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- About Modal -->
+  <div class="modal" id="aboutModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Über uns">
+    <div class="backdrop" data-close="true"></div>
+    <div class="dialog" role="document">
+      <div class="dialog-head">
+        <div class="dialog-title">
+          <span class="dot"></span> Alland & ich – Infos zum Initiator
+        </div>
+        <button class="xbtn" type="button" data-close="true" aria-label="Schließen">×</button>
+      </div>
+      <div class="dialog-body">
+        <div class="about">
+          <div class="avatar">
+            <img src="assets/images/persoenliches_foto.png" alt=" – Michel Matzinger" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+          </div>
+          <div>
+            <p class="lead">
+              Mein Name ist Michel Matzinger und ich lebe seit jeher in unserer Marktgemeinde Alland,
+              die für mich Heimat und Lebensmittelpunkt ist.
+            </p>
+
+            <p>
+              Die Zukunft unserer Gemeinde liegt mir sehr am Herzen. Besonders wichtig ist mir eine nachhaltige Ortsentwicklung,
+              die Infrastruktur, Verkehr und die Lebensqualität aller Bewohnerinnen und Bewohner berücksichtigt.
+            </p>
+
+            <p>
+              Mit diesem Initiativantrag möchte ich gemeinsam mit Ihnen dafür eintreten, dass sich Alland auch in Zukunft
+              verantwortungsvoll, mit Maß und Ziel weiterentwickelt.
+            </p>
+
+            <p style="margin-top:12px">
+              Bei Fragen oder Anliegen können Sie mich jederzeit gerne kontaktieren:
+              <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+            </p>
+
+            <div class="kpi">
+              <div class="card">
+                <h3 style="margin:0 0 6px">Worum es geht</h3>
+                <div class="muted">Verantwortungsvolle Ortsentwicklung im Einklang mit Infrastruktur & Lebensqualität.</div>
+              </div>
+              <div class="card">
+                <h3 style="margin:0 0 6px">Wie du helfen kannst</h3>
+                <div class="muted">Unterschrift leisten – per PDF oder nach persönlicher Kontaktaufnahme.</div>
+              </div>
+            </div>
+
+            <div class="smallprint">
+              Zustellungsbevollmächtigter gemäß § 16 NÖ Gemeindeordnung 1973: <strong>Michel Matzinger</strong><br>
+              Groisbacherstraße 283, 2534 Alland · E-Mail:
+              <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+            </div>
+
+            <div class="cta-actions" style="margin-top:16px">
+              <a class="btn btn-primary" href="#unterstuetzen" onclick="closeModal('aboutModal')">Unterstützen</a>
+              <a class="btn btn-navy" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">PDF öffnen</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // ---- Accordion (Safari-safe) ----
+      function setPanelHeight(item, open) {
+        var panel = item.querySelector('.acc-panel');
+        var inner = item.querySelector('.acc-inner');
+        if (!panel || !inner) return;
+
+        if (open) {
+          panel.style.height = inner.scrollHeight + 'px';
+          item.setAttribute('data-open', 'true');
+          var btn = item.querySelector('.acc-btn');
+          if (btn) btn.setAttribute('aria-expanded', 'true');
+        } else {
+          panel.style.height = '0px';
+          item.setAttribute('data-open', 'false');
+          var btn2 = item.querySelector('.acc-btn');
+          if (btn2) btn2.setAttribute('aria-expanded', 'false');
+        }
+      }
+
+      function initAccordion() {
+        var items = document.querySelectorAll('.acc-item');
+        for (var i = 0; i < items.length; i++) {
+          (function (item) {
+            var open = item.getAttribute('data-open') === 'true';
+            setPanelHeight(item, open);
+
+            var btn = item.querySelector('.acc-btn');
+            if (!btn) return;
+            btn.addEventListener('click', function () {
+              var isOpen = item.getAttribute('data-open') === 'true';
+              setPanelHeight(item, !isOpen);
+            });
+          })(items[i]);
+        }
+
+        window.addEventListener('resize', function () {
+          var items2 = document.querySelectorAll('.acc-item');
+          for (var j = 0; j < items2.length; j++) {
+            var it = items2[j];
+            if (it.getAttribute('data-open') === 'true') {
+              setPanelHeight(it, true);
+            }
+          }
+        });
+      }
+
+      // ---- Modal ----
+      function openModal(id) {
+        var modal = document.getElementById(id);
+        if (!modal) return;
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal(id) {
+        var modal = document.getElementById(id);
+        if (!modal) return;
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = 'auto';
+      }
+
+      window.openModal = openModal;
+      window.closeModal = closeModal;
+
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t) return;
+        if (t.getAttribute && t.getAttribute('data-close') === 'true') {
+          closeModal('aboutModal');
+        }
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          closeModal('aboutModal');
+        }
+      });
+
+      // ---- Burger Menu (Mobile/Tablet) ----
+      function initMobileNav(){
+        var topbar = document.querySelector('.topbar');
+        var toggle = document.querySelector('.nav-toggle');
+        var nav = document.getElementById('siteNav');
+        if (!topbar || !toggle || !nav) return;
+
+        function setOpen(open){
+          topbar.classList.toggle('is-open', open);
+          toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+
+        toggle.addEventListener('click', function(){
+          setOpen(!topbar.classList.contains('is-open'));
+        });
+
+        nav.addEventListener('click', function(e){
+          if (e.target && e.target.tagName === 'A') setOpen(false);
+        });
+
+        document.addEventListener('click', function(e){
+          if (!topbar.classList.contains('is-open')) return;
+          if (topbar.contains(e.target)) return;
+          setOpen(false);
+        });
+
+        window.addEventListener('resize', function(){
+          if (window.matchMedia('(min-width: 981px)').matches) setOpen(false);
+        });
+      }
+
+
+      // ---- HOTFIX: Force real mailto navigation (bypasses click rewriters that cause 404) ----
+      function initForceMailto() {
+        document.addEventListener('click', function (e) {
+          var target = e.target;
+          if (!target) return;
+
+          // closest() safe fallback
+          var a = target.closest ? target.closest('a[href^="mailto:"]') : null;
+          if (!a) {
+            var el = target;
+            while (el && el !== document) {
+              if (el.tagName === 'A' && el.getAttribute && (el.getAttribute('href') || '').indexOf('mailto:') === 0) { a = el; break; }
+              el = el.parentNode;
+            }
+          }
+          if (!a) return;
+
+          var href = a.getAttribute('href') || '';
+          var dataMail = (a.getAttribute('data-mailto') || '').trim();
+          var mailto = dataMail ? ('mailto:' + dataMail.replace(/^mailto:/i,'')) : href;
+          if (!mailto || mailto.indexOf('mailto:') !== 0) return;
+
+          e.preventDefault();
+          if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+          e.stopPropagation();
+
+          // Use location to trigger OS/mail client
+          window.location.href = mailto;
+        }, true); // capture = run before most other handlers
+      }
+
+      // ---- Contact form -> mailto ----
+      function initMailtoForm() {
+        var btn = document.getElementById('sendContactBtn');
+        if (!btn) return;
+
+        btn.addEventListener('click', function () {
+          var vorname = document.getElementById('vorname').value;
+          var nachname = document.getElementById('nachname').value;
+          var telefon = document.getElementById('telefon').value;
+          var email = document.getElementById('email').value;
+          var notiz = document.getElementById('notiz').value;
+          var consent = document.getElementById('consent').checked;
+
+          if (!vorname || !nachname || !telefon || !consent) {
+            alert('Bitte Vorname, Familienname, Telefonnummer ausfüllen und Zustimmung setzen.');
+            return;
+          }
+
+          var to = 'm.matzinger@gmx.at';
+          var subject = 'Kontaktanfrage – Initiativantrag Lebenswertes Alland';
+          var body =
+            'Kontaktanfrage (Option 1)\\n\\n' +
+            'Vorname: ' + vorname + '\\n' +
+            'Familienname: ' + nachname + '\\n' +
+            'Telefon: ' + telefon + '\\n' +
+            'E-Mail: ' + (email || '-') + '\\n' +
+            'Notiz: ' + (notiz || '-') + '\\n\\n' +
+            'Zustimmung: Kontaktaufnahme zum Zweck der persönlichen Unterschriftsleistung.';
+
+          var href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+          window.location.href = href;
+        });
+      }
+
+      // ---- Copy email fallback ----
+      function initCopyEmail() {
+        var btn = document.getElementById('copyEmailBtn');
+        if (!btn) return;
+
+        btn.addEventListener('click', function () {
+          var email = 'm.matzinger@gmx.at';
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(email).then(function () {
+              alert('E-Mail-Adresse kopiert: ' + email);
+            }, function () {
+              prompt('Kopieren: ', email);
+            });
+          } else {
+            prompt('Kopieren: ', email);
+          }
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        initAccordion();
+        initMobileNav();
+        initForceMailto();
+        initMailtoForm();
+        initCopyEmail();
+      });
+    })();
+  </script>
+
+  <!-- (c) Copyright - Manfred Foissner - 2026 -->
 </body>
 </html>
