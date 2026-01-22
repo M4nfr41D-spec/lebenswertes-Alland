@@ -506,15 +506,11 @@
       box-shadow: var(--shadow);
       background:#fff;
     }
-    .avatar img{width:100%; height:260px; object-fit:cover; display:block;}
+    .avatar img{width:100%; height:auto; display:block;}
 
     /* ===== HOTFIX: Tablet-Ansicht – Avatar nicht abschneiden ===== */
     @media (min-width: 601px) and (max-width: 980px){
-      #aboutModal .avatar img{
-        height: 320px;
-        object-fit: contain;
-        background:#fff;
-      }
+      #aboutModal .avatar img{width:100%; height:auto; display:block;}
     }
 
     .about p{margin:10px 0}
@@ -572,6 +568,24 @@
       font-weight: 950;
     }
     a[href^="mailto:"]:hover{ text-decoration-thickness:2px; }
+  
+    /* HOTFIX: Mail-Links immer korrekt + sichtbar (gegen Elementor Redirect/Overrides) */
+    a.mail-link,
+    a.mail-link:visited{
+      color: #0A2e5C !important;
+      opacity: 1 !important;
+      font-weight: 950;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    a.mail-link:hover{ text-decoration-thickness: 2px; }
+
+    /* HOTFIX: Keine "hellgrauen" Texte auf weißem Hintergrund (Footer/Modal/Main) */
+    main, main *:not(.hero *), .dialog, .dialog * , .foot, .foot *{
+      color: #0A2e5C;
+    }
+    .hero, .hero *{ color: inherit; } /* schützt Weiß im Hero */
+    
   </style>
 </head>
 
@@ -621,8 +635,7 @@
       <div class="hero-actions">
         <a class="btn btn-primary" href="#unterstuetzen">Jetzt unterstützen</a>
         <a class="btn btn-ghost" href="#" onclick="openModal('aboutModal'); return false;">Warum mir Alland wichtig ist</a>
-        <a class="btn btn-ghost" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">Formular als PDF</a>
-      </div>
+        </div>
 
       <div class="hero-note">
         Zwei Wege: PDF herunterladen & unterschreiben – oder Kontakt hinterlassen, wir melden uns persönlich.
@@ -775,7 +788,7 @@
                 <p><strong>Zustellungsbevollmächtigter gemäß § 16 NÖ Gemeindeordnung 1973</strong><br>
                   Name: Michel Matzinger<br>
                   Adresse: Groisbacherstraße 283, 2534 Alland<br>
-                  E-Mail: <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a><br>
+                  E-Mail: <a class="mail-link" href="#" data-mail="m.matzinger@gmx.at">m.matzinger@gmx.at</a><br>
                   Diese Person ist zur Entgegennahme sämtlicher Mitteilungen der Marktgemeinde Alland in dieser Angelegenheit berechtigt.
                 </p>
 
@@ -826,7 +839,7 @@
                 </p>
                 <p class="helper">
                   Mehr Informationen:
-                  <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+                  <a class="mail-link" href="#" data-mail="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
                   – Initiator und Ihr Ansprechpartner für Rückfragen
                 </p>
               </div>
@@ -920,14 +933,13 @@
 
               <div class="cta-actions">
                 <button class="btn btn-primary" type="button" id="sendContactBtn">Kontaktanfrage senden</button>
-                <a class="btn btn-navy" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">PDF herunterladen</a>
                 <button class="btn btn-soft" type="button" id="copyEmailBtn">E-Mail kopieren</button>
               </div>
 
               <div class="helper" style="margin-top:10px">
                 Hinweis: Die Kontaktanfrage öffnet deine Mail-App.<br>
                 Falls das nicht klappt: „E-Mail kopieren“ und manuell senden an
-                <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>.
+                <a class="mail-link" href="#" data-mail="m.matzinger@gmx.at">m.matzinger@gmx.at</a>.
               </div>
             </form>
           </div>
@@ -941,7 +953,7 @@
             </div>
 
             <div class="cta-actions">
-              <a class="btn btn-navy" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">Unterstützungsformular (PDF)</a>
+              <a class="btn btn-navy" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">Unterstützungsformular</a>
               <a class="btn btn-soft" href="#" onclick="openModal('aboutModal'); return false;">Alland & ich – Infos zum Initiator</a>
             </div>
 
@@ -971,7 +983,7 @@
         <div style="text-align:center; margin-top:14px">
           <span class="muted">Kontakt (Zustellungsbevollmächtigter):</span>
           Michel Matzinger · Groisbacherstraße 283 · 2534 Alland ·
-          <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+          <a class="mail-link" href="#" data-mail="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
         </div>
         <div class="smallprint" style="text-align:center">
           Dieses Informationsangebot dient der Bürgerinitiative und der Organisation der persönlichen Unterschriftsleistung.
@@ -1014,7 +1026,7 @@
 
             <p style="margin-top:12px">
               Bei Fragen oder Anliegen können Sie mich jederzeit gerne kontaktieren:
-              <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+              <a class="mail-link" href="#" data-mail="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
             </p>
 
             <div class="kpi">
@@ -1031,12 +1043,12 @@
             <div class="smallprint">
               Zustellungsbevollmächtigter gemäß § 16 NÖ Gemeindeordnung 1973: <strong>Michel Matzinger</strong><br>
               Groisbacherstraße 283, 2534 Alland · E-Mail:
-              <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+              <a class="mail-link" href="#" data-mail="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
             </div>
 
             <div class="cta-actions" style="margin-top:16px">
               <a class="btn btn-primary" href="#unterstuetzen" onclick="closeModal('aboutModal')">Unterstützen</a>
-              <a class="btn btn-navy" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">PDF öffnen</a>
+              <a class="btn btn-navy" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">Unterstützungsformular</a>
             </div>
           </div>
         </div>
@@ -1046,6 +1058,20 @@
 
   <script>
     (function () {
+      // ---- Mailto helper (bypasses Elementor mailto redirects) ----
+      function openMailto(href){
+        try{
+          var a = document.createElement("a");
+          a.href = href;
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }catch(err){
+          openMailto(href);
+        }
+      }
+
       // ---- Accordion (Safari-safe) ----
       function setPanelHeight(item, open) {
         var panel = item.querySelector('.acc-panel');
@@ -1217,7 +1243,7 @@
             'Zustimmung: Kontaktaufnahme zum Zweck der persönlichen Unterschriftsleistung.';
 
           var href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-          window.location.href = href;
+          openMailto(href);
         });
       }
 
@@ -1230,6 +1256,20 @@
           var email = 'm.matzinger@gmx.at';
           if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(email).then(function () {
+      // ---- Mailto helper (bypasses Elementor mailto redirects) ----
+      function openMailto(href){
+        try{
+          var a = document.createElement("a");
+          a.href = href;
+          a.style.display = "none";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }catch(err){
+          openMailto(href);
+        }
+      }
+
               alert('E-Mail-Adresse kopiert: ' + email);
             }, function () {
               prompt('Kopieren: ', email);
@@ -1239,6 +1279,20 @@
           }
         });
       }
+
+      
+      // ---- Clickable mail links (works even if Elementor rewrites anchors) ----
+      document.addEventListener('click', function(e){
+        var el = e.target;
+        if (!el) return;
+        var link = (el.closest ? el.closest('a.mail-link') : null);
+        if (!link) return;
+        e.preventDefault();
+        e.stopPropagation();
+        var addr = link.getAttribute('data-mail') || (link.textContent || '').trim();
+        if (!addr) return;
+        openMailto('mailto:' + addr);
+      }, true);
 
       document.addEventListener('DOMContentLoaded', function () {
         initAccordion();
