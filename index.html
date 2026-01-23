@@ -572,6 +572,38 @@
       font-weight: 950;
     }
     a[href^="mailto:"]:hover{ text-decoration-thickness:2px; }
+  
+/* HOTFIX: Navy Buttons immer mit weißer Schrift (gegen Overrides) */
+.btn-navy,
+a.btn.btn-navy,
+a.btn.btn-navy:visited,
+.cta-actions a.btn.btn-navy,
+.cta-actions a.btn.btn-navy:visited {
+  color:#fff !important;
+}
+
+/* Burger-Menü nur auf Tablet/Phone */
+.nav-toggle{display:none; border:1px solid rgba(10,46,92,.12); background:#fff; border-radius:12px; width:44px; height:44px; cursor:pointer; place-items:center;}
+.nav-toggle-bars{display:block; width:18px; height:2px; background: rgba(10,46,92,.85); position:relative;}
+.nav-toggle-bars::before,.nav-toggle-bars::after{content:""; position:absolute; left:0; width:18px; height:2px; background: rgba(10,46,92,.85);}
+.nav-toggle-bars::before{top:-6px;}
+.nav-toggle-bars::after{top:6px;}
+
+.nav-links{display:flex; gap:12px; align-items:center; flex-wrap:wrap;}
+
+@media (max-width: 920px){
+  .nav{gap:10px;}
+  .nav-toggle{display:grid;}
+  .nav-links{display:none; position:absolute; top:100%; right:0; margin-top:10px; padding:10px; background: rgba(255,255,255,.98); border:1px solid rgba(226,230,238,.9); border-radius:14px; box-shadow: var(--shadow); flex-direction:column; align-items:stretch; min-width: 220px;}
+  .nav.open .nav-links{display:flex;}
+  .nav-links a{width:100%; padding:10px 12px; border-radius:12px;}
+  .nav-links a:hover{background: rgba(10,46,92,.06);}
+}
+
+/* Upload Box optisch sauber */
+.upload-wrap{margin-top:14px; padding-top:2px;}
+.upload-form input[type="file"]{background:#fff; padding:12px;}
+
   </style>
 </head>
 
@@ -621,8 +653,7 @@
       <div class="hero-actions">
         <a class="btn btn-primary" href="#unterstuetzen">Jetzt unterstützen</a>
         <a class="btn btn-ghost" href="#" onclick="openModal('aboutModal'); return false;">Warum mir Alland wichtig ist</a>
-        <a class="btn btn-ghost" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">Formular als PDF</a>
-      </div>
+</div>
 
       <div class="hero-note">
         Zwei Wege: PDF herunterladen & unterschreiben – oder Kontakt hinterlassen, wir melden uns persönlich.
@@ -775,7 +806,7 @@
                 <p><strong>Zustellungsbevollmächtigter gemäß § 16 NÖ Gemeindeordnung 1973</strong><br>
                   Name: Michel Matzinger<br>
                   Adresse: Groisbacherstraße 283, 2534 Alland<br>
-                  E-Mail: <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a><br>
+                  E-Mail: <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a><br>
                   Diese Person ist zur Entgegennahme sämtlicher Mitteilungen der Marktgemeinde Alland in dieser Angelegenheit berechtigt.
                 </p>
 
@@ -826,7 +857,7 @@
                 </p>
                 <p class="helper">
                   Mehr Informationen:
-                  <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+                  <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
                   – Initiator und Ihr Ansprechpartner für Rückfragen
                 </p>
               </div>
@@ -920,14 +951,13 @@
 
               <div class="cta-actions">
                 <button class="btn btn-primary" type="button" id="sendContactBtn">Kontaktanfrage senden</button>
-                <a class="btn btn-navy" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">PDF herunterladen</a>
-                <button class="btn btn-soft" type="button" id="copyEmailBtn">E-Mail kopieren</button>
+<button class="btn btn-soft" type="button" id="copyEmailBtn">E-Mail kopieren</button>
               </div>
 
               <div class="helper" style="margin-top:10px">
                 Hinweis: Die Kontaktanfrage öffnet deine Mail-App.<br>
                 Falls das nicht klappt: „E-Mail kopieren“ und manuell senden an
-                <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>.
+                <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>.
               </div>
             </form>
           </div>
@@ -941,9 +971,51 @@
             </div>
 
             <div class="cta-actions">
-              <a class="btn btn-navy" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">Unterstützungsformular (PDF)</a>
               <a class="btn btn-soft" href="#" onclick="openModal('aboutModal'); return false;">Alland & ich – Infos zum Initiator</a>
             </div>
+<div class="upload-wrap" aria-label="Unterstützung hochladen">
+  <div class="pill" style="margin-top:14px">Schon unterschrieben?</div>
+  <div class="muted" style="margin-top:8px">
+    Du kannst die unterschriebene Unterstützungserklärung fotografieren oder scannen und hier direkt hochladen.
+  </div>
+
+  <form id="uploadForm" class="upload-form" action="assets/api/send.php" method="post" enctype="multipart/form-data" novalidate>
+    <div class="form" style="margin-top:12px">
+      <div>
+        <label for="u_vorname">Vorname</label>
+        <input id="u_vorname" name="vorname" autocomplete="given-name" required>
+      </div>
+      <div>
+        <label for="u_nachname">Familienname</label>
+        <input id="u_nachname" name="nachname" autocomplete="family-name" required>
+      </div>
+      <div class="span-2">
+        <label for="u_email">E-Mail (für Rückfragen)</label>
+        <input id="u_email" name="email" autocomplete="email" required>
+      </div>
+      <div class="span-2">
+        <label for="u_file">Unterschriebene Erklärung hochladen (PDF / Foto)</label>
+        <input id="u_file" name="file" type="file" accept=".pdf,image/*" required>
+      </div>
+    </div>
+
+    <div class="checkrow">
+      <input id="u_consent" name="consent" type="checkbox" required>
+      <label for="u_consent" style="font-weight:750">
+        Ich stimme zu, dass meine Angaben ausschließlich zur Bearbeitung der Unterstützungserklärung verwendet werden.
+        Die Daten werden nicht weitergegeben und nach Abschluss der Initiative gelöscht.
+      </label>
+    </div>
+
+    <div class="cta-actions" style="margin-top:12px">
+      <button class="btn btn-primary" type="submit" id="uploadBtn">Hochladen & absenden</button>
+      <a class="btn btn-navy btn-form" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">Unterstützungsformular</a>
+    </div>
+
+    <div class="helper" id="uploadStatus" style="margin-top:10px"></div>
+  </form>
+</div>
+
 
             <div class="legal-block" style="margin-top:14px">
               <strong>Quick-Guide:</strong>
@@ -971,7 +1043,7 @@
         <div style="text-align:center; margin-top:14px">
           <span class="muted">Kontakt (Zustellungsbevollmächtigter):</span>
           Michel Matzinger · Groisbacherstraße 283 · 2534 Alland ·
-          <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+          <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
         </div>
         <div class="smallprint" style="text-align:center">
           Dieses Informationsangebot dient der Bürgerinitiative und der Organisation der persönlichen Unterschriftsleistung.
@@ -1014,7 +1086,7 @@
 
             <p style="margin-top:12px">
               Bei Fragen oder Anliegen können Sie mich jederzeit gerne kontaktieren:
-              <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+              <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
             </p>
 
             <div class="kpi">
@@ -1030,8 +1102,7 @@
 
             <div class="smallprint">
               Zustellungsbevollmächtigter gemäß § 16 NÖ Gemeindeordnung 1973: <strong>Michel Matzinger</strong><br>
-              Groisbacherstraße 283, 2534 Alland · E-Mail:
-              <a href="mailto:m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+              Groisbacherstraße 283, 2534 Alland · E-Mail: <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
             </div>
 
             <div class="cta-actions" style="margin-top:16px">
@@ -1205,7 +1276,7 @@
             return;
           }
 
-          var to = 'm.matzinger@gmx.at';
+          var to = '<a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>';
           var subject = 'Kontaktanfrage – Initiativantrag Lebenswertes Alland';
           var body =
             'Kontaktanfrage (Option 1)\\n\\n' +
@@ -1227,7 +1298,7 @@
         if (!btn) return;
 
         btn.addEventListener('click', function () {
-          var email = 'm.matzinger@gmx.at';
+          var email = '<a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>';
           if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(email).then(function () {
               alert('E-Mail-Adresse kopiert: ' + email);
@@ -1239,6 +1310,128 @@
           }
         });
       }
+
+      // ---- Universal mail links (avoid Elementor mailto rewrites -> 404) ----
+function initMailLinks() {
+  var links = document.querySelectorAll('a.mail-link[data-mailto]');
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener('click', function (e) {
+      e.preventDefault();
+      var addr = this.getAttribute('data-mailto');
+      if (!addr) return;
+      window.location.href = 'mailto:' + addr;
+    });
+  }
+}
+
+// ---- Burger menu (Tablet/Phone) ----
+function initBurgerMenu() {
+  var nav = document.getElementById('siteNav');
+  if (!nav) return;
+  var btn = nav.querySelector('.nav-toggle');
+  var linksWrap = nav.querySelector('.nav-links');
+  if (!btn || !linksWrap) return;
+
+  function close() {
+    nav.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+  function toggle() {
+    var open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  btn.addEventListener('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    toggle();
+  });
+
+  linksWrap.addEventListener('click', function (e) {
+    // close on any link tap
+    var t = e.target;
+    if (t && t.tagName === 'A') close();
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!nav.contains(e.target)) close();
+  });
+
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 920) close();
+  });
+}
+
+// ---- Upload signed form (requires server endpoint; fallback to mailto) ----
+function initUploadForm() {
+  var form = document.getElementById('uploadForm');
+  if (!form) return;
+
+  // friendly "already sent" (client-side convenience)
+  try{
+    if (localStorage.getItem('alland_support_sent') === '1') {
+      var st = document.getElementById('uploadStatus');
+      if (st) st.textContent = 'Wir haben Ihre Unterstützungserklärung für ein lebenswertes Alland bereits dankend erhalten!';
+    }
+  }catch(_){}
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var vorname = document.getElementById('u_vorname').value.trim();
+    var nachname = document.getElementById('u_nachname').value.trim();
+    var email = document.getElementById('u_email').value.trim();
+    var fileInput = document.getElementById('u_file');
+    var consent = document.getElementById('u_consent').checked;
+    var status = document.getElementById('uploadStatus');
+
+    if (!vorname || !nachname || !email || !fileInput || !fileInput.files || !fileInput.files[0] || !consent) {
+      if (status) status.textContent = 'Bitte Vorname, Familienname, E-Mail, Datei auswählen und Zustimmung setzen.';
+      return;
+    }
+
+    if (status) status.textContent = 'Upload wird gesendet …';
+
+    var fd = new FormData(form);
+    // add a tiny anti-bot hint
+    fd.append('ts', String(Date.now()));
+
+    fetch(form.action, { method: 'POST', body: fd })
+      .then(function (r) { return r.json().catch(function(){ return { ok:false, message:'Unerwartete Antwort.' }; }); })
+      .then(function (data) {
+        if (data && data.ok) {
+          if (status) status.textContent = 'Danke! Wir haben Ihre Unterstützungserklärung erhalten.';
+          try{ localStorage.setItem('alland_support_sent','1'); }catch(_){}
+          form.reset();
+          return;
+        }
+        throw new Error((data && data.message) ? data.message : 'Senden nicht möglich.');
+      })
+      .catch(function (err) {
+        // fallback: open mail client (user attaches file manually)
+        if (status) status.textContent = 'Direktes Senden ist derzeit nicht verfügbar. Bitte sende die E-Mail manuell (Anhang hinzufügen).';
+        var to = 'm.matzinger@gmx.at';
+        var subject = 'Unterstützungserklärung (Upload) – Lebenswertes Alland';
+        var body =
+          'Hallo,
+
+' +
+          'ich unterstütze den Initiativantrag und sende die unterschriebene Erklärung im Anhang.
+
+' +
+          'Vorname: ' + vorname + '
+' +
+          'Familienname: ' + nachname + '
+' +
+          'E-Mail: ' + email + '
+
+' +
+          'Hinweis: Bitte unterschriebene Erklärung als Anhang hinzufügen.
+';
+        window.location.href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+      });
+  });
+}
 
       document.addEventListener('DOMContentLoaded', function () {
         initAccordion();
