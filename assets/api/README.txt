@@ -1,0 +1,1 @@
+GitHub Pages: kein Backend. Upload erfolgt per Mailto (Anhang manuell).

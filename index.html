@@ -857,7 +857,7 @@ a.btn.btn-navy:visited,
                 </p>
                 <p class="helper">
                   Mehr Informationen:
-                  <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+                  <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
                   – Initiator und Ihr Ansprechpartner für Rückfragen
                 </p>
               </div>
@@ -957,7 +957,7 @@ a.btn.btn-navy:visited,
               <div class="helper" style="margin-top:10px">
                 Hinweis: Die Kontaktanfrage öffnet deine Mail-App.<br>
                 Falls das nicht klappt: „E-Mail kopieren“ und manuell senden an
-                <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>.
+                <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>.
               </div>
             </form>
           </div>
@@ -1009,7 +1009,7 @@ a.btn.btn-navy:visited,
 
     <div class="cta-actions" style="margin-top:12px">
       <button class="btn btn-primary" type="submit" id="uploadBtn">Hochladen & absenden</button>
-      <a class="btn btn-navy btn-form" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">Unterstützungsformular</a>
+      <a class="btn btn-navy btn-form" href="assets/docs/Postwurfsendung.pdf" download>Unterstützungsformular</a>
     </div>
 
     <div class="helper" id="uploadStatus" style="margin-top:10px"></div>
@@ -1043,7 +1043,7 @@ a.btn.btn-navy:visited,
         <div style="text-align:center; margin-top:14px">
           <span class="muted">Kontakt (Zustellungsbevollmächtigter):</span>
           Michel Matzinger · Groisbacherstraße 283 · 2534 Alland ·
-          <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+          <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
         </div>
         <div class="smallprint" style="text-align:center">
           Dieses Informationsangebot dient der Bürgerinitiative und der Organisation der persönlichen Unterschriftsleistung.
@@ -1086,7 +1086,7 @@ a.btn.btn-navy:visited,
 
             <p style="margin-top:12px">
               Bei Fragen oder Anliegen können Sie mich jederzeit gerne kontaktieren:
-              <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
+              <a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>
             </p>
 
             <div class="kpi">
@@ -1107,7 +1107,7 @@ a.btn.btn-navy:visited,
 
             <div class="cta-actions" style="margin-top:16px">
               <a class="btn btn-primary" href="#unterstuetzen" onclick="closeModal('aboutModal')">Unterstützen</a>
-              <a class="btn btn-navy" href="assets/docs/Postwurfsendung.pdf" target="_blank" rel="noopener">PDF öffnen</a>
+              <a class="btn btn-navy" href="assets/docs/Postwurfsendung.pdf" download>PDF herunterladen</a>
             </div>
           </div>
         </div>
@@ -1276,7 +1276,7 @@ a.btn.btn-navy:visited,
             return;
           }
 
-          var to = '<a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>';
+          var to = 'm.matzinger@gmx.at';
           var subject = 'Kontaktanfrage – Initiativantrag Lebenswertes Alland';
           var body =
             'Kontaktanfrage (Option 1)\\n\\n' +
@@ -1298,7 +1298,7 @@ a.btn.btn-navy:visited,
         if (!btn) return;
 
         btn.addEventListener('click', function () {
-          var email = '<a href="#" class="mail-link" data-mailto="m.matzinger@gmx.at">m.matzinger@gmx.at</a>';
+          var email = 'm.matzinger@gmx.at';
           if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(email).then(function () {
               alert('E-Mail-Adresse kopiert: ' + email);
@@ -1362,74 +1362,59 @@ function initBurgerMenu() {
   });
 }
 
-// ---- Upload signed form (requires server endpoint; fallback to mailto) ----
+// ---- Upload signed form (GitHub Pages): open mail client, user attaches file manually ----
 function initUploadForm() {
   var form = document.getElementById('uploadForm');
   if (!form) return;
 
-  // friendly "already sent" (client-side convenience)
-  try{
-    if (localStorage.getItem('alland_support_sent') === '1') {
-      var st = document.getElementById('uploadStatus');
-      if (st) st.textContent = 'Wir haben Ihre Unterstützungserklärung für ein lebenswertes Alland bereits dankend erhalten!';
-    }
-  }catch(_){}
+  // GitHub Pages has no backend: disable action to avoid 405/confusion
+  form.setAttribute('action', '#');
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
 
-    var vorname = document.getElementById('u_vorname').value.trim();
-    var nachname = document.getElementById('u_nachname').value.trim();
-    var email = document.getElementById('u_email').value.trim();
+    var vorname = (document.getElementById('u_vorname').value || '').trim();
+    var nachname = (document.getElementById('u_nachname').value || '').trim();
+    var email = (document.getElementById('u_email').value || '').trim();
     var fileInput = document.getElementById('u_file');
     var consent = document.getElementById('u_consent').checked;
     var status = document.getElementById('uploadStatus');
 
-    if (!vorname || !nachname || !email || !fileInput || !fileInput.files || !fileInput.files[0] || !consent) {
-      if (status) status.textContent = 'Bitte Vorname, Familienname, E-Mail, Datei auswählen und Zustimmung setzen.';
+    if (!vorname || !nachname || !email || !consent) {
+      if (status) status.textContent = 'Bitte Vorname, Familienname, E-Mail ausfüllen und Zustimmung setzen.';
       return;
     }
 
-    if (status) status.textContent = 'Upload wird gesendet …';
+    if (!fileInput || !fileInput.files || !fileInput.files[0]) {
+      if (status) status.textContent = 'Bitte die unterschriebene Erklärung als Datei auswählen (PDF oder Foto).';
+      return;
+    }
 
-    var fd = new FormData(form);
-    // add a tiny anti-bot hint
-    fd.append('ts', String(Date.now()));
+    if (status) status.textContent = 'Mailprogramm wird geöffnet – bitte Anhang hinzufügen und senden.';
 
-    fetch(form.action, { method: 'POST', body: fd })
-      .then(function (r) { return r.json().catch(function(){ return { ok:false, message:'Unerwartete Antwort.' }; }); })
-      .then(function (data) {
-        if (data && data.ok) {
-          if (status) status.textContent = 'Danke! Wir haben Ihre Unterstützungserklärung erhalten.';
-          try{ localStorage.setItem('alland_support_sent','1'); }catch(_){}
-          form.reset();
-          return;
-        }
-        throw new Error((data && data.message) ? data.message : 'Senden nicht möglich.');
-      })
-      .catch(function (err) {
-        // fallback: open mail client (user attaches file manually)
-        if (status) status.textContent = 'Direktes Senden ist derzeit nicht verfügbar. Bitte sende die E-Mail manuell (Anhang hinzufügen).';
-        var to = 'm.matzinger@gmx.at';
-        var subject = 'Unterstützungserklärung (Upload) – Lebenswertes Alland';
-        var body =
-          'Hallo,
+    var to = 'm.matzinger@gmx.at';
+    var subject = 'Unterstützungserklärung (unterschrieben) – Lebenswertes Alland';
+    var body =
+      'Hallo,
 
 ' +
-          'ich unterstütze den Initiativantrag und sende die unterschriebene Erklärung im Anhang.
+      'ich unterstütze den Initiativantrag und sende die unterschriebene Erklärung im Anhang.
 
 ' +
-          'Vorname: ' + vorname + '
+      'Vorname: ' + vorname + '
 ' +
-          'Familienname: ' + nachname + '
+      'Familienname: ' + nachname + '
 ' +
-          'E-Mail: ' + email + '
+      'E-Mail: ' + email + '
 
 ' +
-          'Hinweis: Bitte unterschriebene Erklärung als Anhang hinzufügen.
+      'Hinweis: Bitte die ausgewählte Datei als Anhang hinzufügen (PDF/Foto) und dann senden.
 ';
-        window.location.href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-      });
+
+    window.location.href =
+      'mailto:' + to +
+      '?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(body);
   });
 }
 
@@ -1439,6 +1424,7 @@ function initUploadForm() {
         initForceMailto();
         initMailtoForm();
         initCopyEmail();
+        initUploadForm();
       });
     })();
   </script>
