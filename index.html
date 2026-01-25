@@ -1394,23 +1394,16 @@ function initUploadForm() {
 
     var to = 'm.matzinger@gmx.at';
     var subject = 'Unterstützungserklärung (unterschrieben) – Lebenswertes Alland';
-    var body =
-      'Hallo,
+    var body = `Hallo,
 
-' +
-      'ich unterstütze den Initiativantrag und sende die unterschriebene Erklärung im Anhang.
+ich unterstütze den Initiativantrag und sende die unterschriebene Erklärung im Anhang.
 
-' +
-      'Vorname: ' + vorname + '
-' +
-      'Familienname: ' + nachname + '
-' +
-      'E-Mail: ' + email + '
+Vorname: ${vorname}
+Familienname: ${nachname}
+E-Mail: ${email}
 
-' +
-      'Hinweis: Bitte die ausgewählte Datei als Anhang hinzufügen (PDF/Foto) und dann senden.
-';
-
+Hinweis: Bitte die ausgewählte Datei als Anhang hinzufügen (PDF/Foto) und dann senden.
+`;
     window.location.href =
       'mailto:' + to +
       '?subject=' + encodeURIComponent(subject) +
